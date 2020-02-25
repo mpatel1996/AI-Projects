@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -63,6 +64,9 @@ class Queen extends JFrame{
         // newO = saves current text, open new "untitled" Notepad
         JMenuItem newSolution = new JMenuItem("New Solution"); 
         
+        file.setMnemonic('F');
+        newSolution.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+        
         file.add(newSolution);
         jmb.add(file);
         setJMenuBar(jmb);
@@ -75,6 +79,7 @@ class Queen extends JFrame{
 //            revalidate();
           });
     }
+    
     public void DrawQueen(int QUEEN_SOLUTION[][]){
         
         for (int i = 0; i < QUEEN_SOLUTION.length; i++){
