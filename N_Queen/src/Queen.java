@@ -1,12 +1,12 @@
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 class Queen extends JFrame{
     static int width ;
@@ -15,7 +15,8 @@ class Queen extends JFrame{
     static JPanel squares[][] = new JPanel[8][8];
     static JLabel lab;
     static Image image;
-    
+    static JButton newSolutionButton;
+    static JButton exitButton;
     
     Queen(){
         
@@ -24,11 +25,12 @@ class Queen extends JFrame{
         setLayout(new GridLayout(8, 8));
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        MenuItem();
+        height = (getHeight() / 9 );
+        width = (getWidth() / 9);
         
-        height = (this.getHeight() / 12 );
-        width = (this.getWidth() / 12);
         
-        System.out.println("Height and width" + height + "\t" + width);
+//        System.out.println("Height and width" + height + "\t" + width);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {                
                 squares[i][j] = new JPanel(new BorderLayout());
@@ -41,35 +43,59 @@ class Queen extends JFrame{
             }
         }
         
+        
         try{
-            image = ImageIO.read(new File("F:\\CS4200\\N_Queen\\src\\Queen.png"));
+            image = ImageIO.read(getClass().getResource("Queen.png"));
             image = image.getScaledInstance(width, height, Image.SCALE_DEFAULT);
             
         } catch(IOException e){
             System.out.println("Pic not found");
         }
-        DrawQueen();
-        pack();
+            
         setLocationRelativeTo(null);
         setVisible(true);
+       
     }
     
-    static void DrawQueen(){
-        squares[0][0].add(new JLabel(new ImageIcon(image)));
-        squares[1][2].add(new JLabel(new ImageIcon(image)));
-        squares[2][5].add(new JLabel(new ImageIcon(image)));
-        squares[3][7].add(new JLabel(new ImageIcon(image)));
-    }
-    
-    
-    public static void main(String[] args) throws IOException{
+    public void MenuItem(){
+        JMenuBar jmb = new JMenuBar();
+        JMenu file = new JMenu("File");
+        // newO = saves current text, open new "untitled" Notepad
+        JMenuItem newSolution = new JMenuItem("New Solution"); 
         
-       SwingUtilities.invokeLater(new Runnable(){
-               public void run(){
-                    new Queen();
-               }
-          });      
+        file.add(newSolution);
+        jmb.add(file);
+        setJMenuBar(jmb);
+        
+        newSolution.addActionListener(n ->{
+            solution newSol = new solution();
+            dispose();
+            newSol.newSolution();
+               
+//            revalidate();
+          });
     }
+    public void DrawQueen(int QUEEN_SOLUTION[][]){
+        
+        for (int i = 0; i < QUEEN_SOLUTION.length; i++){
+            for (int j = 0; j < QUEEN_SOLUTION[0].length; j++){
+                if(QUEEN_SOLUTION[i][j] == 1){
+                    squares[i][j].add(new JLabel(new ImageIcon(image)));
+                }
+            }
+        }
+    }
+    
+    
+//    public static void main(String[] args) throws IOException{
+//        
+//       SwingUtilities.invokeLater(new Runnable(){
+//               public void run(){
+//                    new Queen();
+//               }
+//          });
+//      
+//    }
         
     
 }
