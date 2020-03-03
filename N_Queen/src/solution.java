@@ -44,7 +44,7 @@ public class solution {
                 
             }
         }
-        return false;//To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 
     private static boolean notAttacking(int[][] squares, int currRow, int currCol) {
