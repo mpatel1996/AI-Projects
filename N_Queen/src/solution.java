@@ -7,89 +7,95 @@ import java.util.Random;
 
 public class solution {
     
-//    static String QUEEN_SOLUTION;
     static final int MAX_QUEENS = 8;
     static int squares[][];
-    static Queen q;
     
     public static void main(String[] args){
         solution sol = new solution();
-        sol.newSolution();
-       
+        
+        sol.newSolution();       
     }
-
-    public static boolean solvedNQueens(int[][] squares, int currCol) {
+    
+    
+    private static boolean solvedNQueens(int[][] squares, int currCol) {
         Random rand = new Random();
         int randomIndex;
         
+        randomIndex = rand.nextInt(8); // random first row and same everything else
+
         if(currCol >= MAX_QUEENS) return true;
         
         for(int i = 0; i < MAX_QUEENS; i++){
-            randomIndex = rand.nextInt(8);
-            if(safeForPlacement(squares, randomIndex, currCol)){
+            
+            // Random for each col index for each row. 
+//            randomIndex = rand.nextInt(8);
+            
+            
+            System.out.println("### RANDOM INT ### -> " + randomIndex);
+            if(notAttacking(squares, randomIndex, currCol)){
                 squares[randomIndex][currCol] = 1;
+                System.out.println("### RANDOM INT ACCEPTED ### -> " + randomIndex);
                 
                 if (solvedNQueens(squares, currCol +1) == true){
                     return true;
-                }
+                }else{
                     squares[randomIndex][currCol] = 0;
+                }
                 
             }
         }
         return false;//To change body of generated methods, choose Tools | Templates.
     }
 
-    private static boolean safeForPlacement(int[][] squares, int currRow, int currCol) {
+    private static boolean notAttacking(int[][] squares, int currRow, int currCol) {
         
          int i, j; 
   
-        /* Check this row on left side */
+        // Check for horizontal attacks
         for (i = 0; i < currCol; i++) 
             if (squares[currRow][i] == 1) 
                 return false; 
   
-        /* Check upper diagonal on left side */
-        for (i = currRow, j = currCol; i >= 0 && j >= 0; i--, j--) 
-            if (squares[i][j] == 1) 
-                return false; 
-  
-        /* Check lower diagonal on left side */
-        for (i = currRow, j = currCol; j >= 0 && i < MAX_QUEENS; i++, j--) 
-            if (squares[i][j] == 1) 
-                return false; 
-
+        // check for diagonal attacks 
+        for(i = 0; i < MAX_QUEENS; i++)
+        {
+            for(j = 0;j < MAX_QUEENS; j++)
+            {
+                if(((i+j) == (currRow + currCol)) || ((i-j) == (currRow - currCol)))
+                {
+                    if(squares[i][j] == 1)
+                        return false;
+                }
+            }
+        }
+        
         return true;
     }
 
     public void newSolution() {
         squares = new int[8][8];
-        q = new Queen();
+        Queen q = new Queen();
+        
+        
         for (int[] square : squares) {
             for (int j = 0; j < square.length; j++) {
                 square[j] = 0;
             }
         }
-        
-        System.out.println("Before the functions");
-        for (int[] square : squares) {
-            for (int j = 0; j < square.length; j++) {
-                System.out.print(square[j] + " ");
-            }
-            System.out.println();
-        }        
-        
+      
         if(solvedNQueens(squares, 0) == false){
             System.out.println("No Solution Found");
+            q.PopUpDialog();
         }
         
-        System.out.println("After the functions");
+        System.out.println("*** A New Solution ***");
         for (int[] square : squares) {
             for (int j = 0; j < square.length; j++) {
                 System.out.print(square[j] + " ");
             }
             System.out.println();
         }   
-         
+        
         q.DrawQueen(squares);
         q.revalidate();
        

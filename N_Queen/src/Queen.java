@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,6 +18,8 @@ class Queen extends JFrame{
     static Image image;
     static JButton newSolutionButton;
     static JButton exitButton;
+            
+    solution newSol = new solution();
     
     Queen(){
         
@@ -29,19 +32,7 @@ class Queen extends JFrame{
         height = (getHeight() / 9 );
         width = (getWidth() / 9);
         
-        
-//        System.out.println("Height and width" + height + "\t" + width);
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {                
-                squares[i][j] = new JPanel(new BorderLayout());
-                if ((i + j) % 2 == 0) {                    
-                    squares[i][j].setBackground(Color.black);
-                } else {
-                    squares[i][j].setBackground(Color.white);
-                }   
-                add(squares[i][j]);
-            }
-        }
+        drawChessBoard();
         
         
         try{
@@ -57,24 +48,67 @@ class Queen extends JFrame{
        
     }
     
+    public void drawChessBoard(){
+        
+//        System.out.println("Height and width" + height + "\t" + width);
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {                
+                squares[i][j] = new JPanel(new BorderLayout());
+                if ((i + j) % 2 == 0) {                    
+                    squares[i][j].setBackground(Color.black);
+                } else {
+                    squares[i][j].setBackground(Color.white);
+                }   
+                add(squares[i][j]);
+            }
+        }
+    }
+    
+    public void PopUpDialog(){
+        JDialog.setDefaultLookAndFeelDecorated(true);
+        int response = JOptionPane.showConfirmDialog(null, "No Solutions found, "
+                + "Find New Solution?", "Error",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        switch (response) {
+            case JOptionPane.NO_OPTION:
+                System.out.println("No button clicked");
+                System.exit(0);
+                break;
+            case JOptionPane.YES_OPTION:
+                System.out.println("Yes button clicked");
+                dispose();
+                newSol.newSolution();
+                break;
+            case JOptionPane.CLOSED_OPTION:
+                System.out.println("JOptionPane closed");
+                break;
+            default:
+                break;
+        }
+    }
+    
+    
     public void MenuItem(){
         JMenuBar jmb = new JMenuBar();
         JMenu file = new JMenu("File");
         // newO = saves current text, open new "untitled" Notepad
         JMenuItem newSolution = new JMenuItem("New Solution"); 
         
+        file.setMnemonic('F');
+        newSolution.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+        
         file.add(newSolution);
         jmb.add(file);
         setJMenuBar(jmb);
         
         newSolution.addActionListener(n ->{
-            solution newSol = new solution();
+            
             dispose();
             newSol.newSolution();
                
-//            revalidate();
           });
     }
+    
     public void DrawQueen(int QUEEN_SOLUTION[][]){
         
         for (int i = 0; i < QUEEN_SOLUTION.length; i++){
